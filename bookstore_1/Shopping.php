@@ -36,6 +36,18 @@ $books = $booksController->listBooks();
                     <td><?php echo htmlspecialchars($book['genre']); ?></td>
                     <td><?php echo htmlspecialchars($book['publication_year']); ?></td>
                     <td><?php echo htmlspecialchars($book['price']); ?></td>
+                    
+                    <td>
+                         <form action="./Controller/CartController.php" method="post">
+                        <!-- <form action="./Cart/Cart.php" method="post"> -->
+                            <input type="hidden" name="book_id" value="<?php echo htmlspecialchars($book['id']); ?>">
+                            <input type="hidden" name="title" value="<?php echo htmlspecialchars($book['title']); ?>">
+                            <input type="hidden" name="author" value="<?php echo htmlspecialchars($book['author']); ?>">
+                            <input type="hidden" name="price" value="<?php echo htmlspecialchars($book['price']); ?>">
+                            <input type="submit" value="Add to Cart">
+                        </form>
+                    </td>
+
                 </tr>
             <?php endforeach; ?>
         <?php else : ?>
