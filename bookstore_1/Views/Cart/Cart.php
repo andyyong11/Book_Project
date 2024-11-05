@@ -1,36 +1,51 @@
-<?php if (!empty($cartItems)): ?>
-    <?php foreach ($cartItems as $cartItem): ?>
-        <?php $book = $cartItem['book']; ?>
-        <form action="update_cart.php" method="post">
-            <div>
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($book->title); ?>" readonly />
-            </div>
-            <div>
-                <label for="author">Author</label>
-                <input type="text" id="author" name="author" value="<?php echo htmlspecialchars($book->author); ?>" readonly />
-            </div>
-            <div>
-                <label for="genre">Genre</label>
-                <input type="text" id="genre" name="genre" value="<?php echo htmlspecialchars($book->genre); ?>" readonly />
-            </div>
-            <div>
-                <label for="publication_year">Publication Year</label>
-                <input type="number" id="publication_year" name="publication_year" value="<?php echo htmlspecialchars($book->publication_year); ?>" readonly />
-            </div>
-            <div>
-                <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quantity" min="1" required value="<?php echo htmlspecialchars($cartItem['quantity']); ?>" />
-            </div>
-            <div>
-                <label for="price">Price</label>
-                <input type="text" id="price" name="price" value="<?php echo htmlspecialchars($book->price); ?>" readonly />
-            </div>
-            <button type="submit" formaction="checkout.php">Checkout</button>
-            <button type="button" onclick="window.location.href='add_book.php';">Continue Shopping</button>
-            <button type="submit" formaction="remove_from_cart.php?book_id=<?php echo $book->id; ?>">Remove Book</button>
-        </form>
-    <?php endforeach; ?>
+<?php
+// Check if the cart is not empty
+if (!empty($_SESSION['cart'])): ?>
+    <h1>Your Shopping Cart</h1>
+    <table>
+        <tr>
+            <th>Book ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        <?php
+        $totalCost = 0;
+        foreach ($_SESSION['cart'] as $item) {
+            // Check each required key exists in $item array
+            $id = htmlspecialchars($item['id'] ?? '');
+            $title = htmlspecialchars($item['title'] ?? '');
+            $author = htmlspecialchars($item['author'] ?? '');
+            $price = number_format($item['price'] ?? 0, 2);
+            $quantity = htmlspecialchars($item['quantity'] ?? 1);
+            $itemTotal = number_format(($item['price'] ?? 0) * $quantity, 2);
+            $totalCost += ($item['price'] ?? 0) * $quantity;
+            ?>
+            <tr>
+                <td><?php echo $id; ?></td>
+                <td><?php echo $title; ?></td>
+                <td><?php echo $author; ?></td>
+                <td>$<?php echo $price; ?></td>
+                <td>
+                    <input type="number" name="quantity[<?php echo $id; ?>]" value="<?php echo $quantity; ?>" min="1">
+                </td>
+                <td>$<?php echo $itemTotal; ?></td>
+                <td>
+                    <form action="actions/remove_book_to_cart.php" method="post">
+                        <input type="hidden" name="book_id" value="<?php echo $id; ?>">
+                        <button type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        <?php } ?>
+        <tr>
+            <td colspan="5"><strong>Total:</strong></td>
+            <td colspan="2">$<?php echo number_format($totalCost, 2); ?></td>
+        </tr>
+    </table>
 <?php else: ?>
     <p>Your cart is empty.</p>
 <?php endif; ?>

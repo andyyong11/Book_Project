@@ -26,6 +26,7 @@ $books = $booksController->listBooks();
             <th>Genre</th>
             <th>Publication Year</th>
             <th>Price</th>
+            <th>Action</th>
         </tr>
         <?php if (!empty($books)) : ?>
             <?php foreach ($books as $book) : ?>
@@ -38,20 +39,20 @@ $books = $booksController->listBooks();
                     <td><?php echo htmlspecialchars($book['price']); ?></td>
                     
                     <td>
-                         <form action="./Controller/CartController.php" method="post">
-                        <!-- <form action="./Cart/Cart.php" method="post"> -->
+                        <form action="actions/add_book_to_cart.php" method="post"> <!-- Adjusted action path -->
                             <input type="hidden" name="book_id" value="<?php echo htmlspecialchars($book['id']); ?>">
                             <input type="hidden" name="title" value="<?php echo htmlspecialchars($book['title']); ?>">
                             <input type="hidden" name="author" value="<?php echo htmlspecialchars($book['author']); ?>">
                             <input type="hidden" name="price" value="<?php echo htmlspecialchars($book['price']); ?>">
+                            <label>Quantity:</label>
+                            <input type="number" name="quantity" value="1" min="1"> <!-- Quantity input -->
                             <input type="submit" value="Add to Cart">
                         </form>
                     </td>
-
                 </tr>
             <?php endforeach; ?>
         <?php else : ?>
-            <tr><td colspan="6">No books available.</td></tr>
+            <tr><td colspan="7">No books available.</td></tr>
         <?php endif; ?>
     </table>
 </body>

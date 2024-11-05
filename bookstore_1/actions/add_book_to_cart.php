@@ -1,31 +1,33 @@
 <?php
+require_once '../Controller/CartController.php';
 
-require_once __DIR__ . '/../Controller/CartController.php';
+// Initialize the CartController
+$cartController = new CartController();
 
+// Get the book details from the form
+$bookId = filter_input(INPUT_POST, 'book_id', FILTER_VALIDATE_INT);
+$title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$author = filter_input(INPUT_POST, 'author', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
+$quantity = 1; // Default quantity to 1 for each add-to-cart action
 
-
-// Get form data
-$title = $_POST['title'];
-$author = $_POST['author'];
-$genre = $_POST['genre'];
-$publication_year = $_POST['publication_year'];
-$price = $_POST['price'];
-$quantity = $_POST['quantity'];
-
-// Create a book object (this can also be an associative array if simpler)
-$book = (object) [
-    'id' => uniqid(), // Unique ID for the book (could be replaced by database ID if available)
+// Debugging: Check the values
+echo "<pre>";
+var_dump([
+    'bookId' => $bookId,
     'title' => $title,
     'author' => $author,
-    'genre' => $genre,
-    'publication_year' => $publication_year,
-    'price' => $price
-];
+    'price' => $price,
+]);
+echo "</pre>";
 
-// Initialize CartController and add book to cart
-$cartController = new CartController();
-$cartController->addToCart($book, $quantity);
-
-// Redirect to cart or a confirmation page
-header("Location: cart.php");
-exit();
+// Adjust the validation to handle free items if needed
+if ($bookId && $title && $author && ($price > 0 || $price === 0.0)) {
+    // Pass all required arguments to addBookToCart
+    $cartController->addBookToCart($bookId, $quantity, $title, $author, $price);
+    // Redirect back to the shopping page after adding to cart
+    header('Location: ../index.php'); // Adjust if your shopping page is in a different location
+    exit();
+} else {
+    die("Invalid book details provided.");
+}
