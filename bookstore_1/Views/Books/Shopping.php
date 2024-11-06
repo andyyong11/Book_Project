@@ -16,8 +16,9 @@ $books = $booksController->listBooks();
     <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
+    <div Class="container">
     <h2>Our Book Collection</h2>
-    <table>
+    <table Class = "table">
         <tr>
             <th>Book ID</th>
             <th>Title</th>
@@ -53,6 +54,7 @@ $books = $booksController->listBooks();
             <tr><td colspan="7">No books available.</td></tr>
         <?php endif; ?>
     </table>
+    </div>
 </body>
 </html>
 <?php include '../../templates/footer.php'; ?>

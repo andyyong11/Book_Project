@@ -1,3 +1,4 @@
+<?php include '../../templates/header.php'; ?>
 <?php
 require_once '../../Model/Cart.php'; // Make sure this includes the model where the session is already started
 
@@ -25,9 +26,10 @@ $total = $cart->getTotal();
     <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
+    <div Class="container">
     <h2>Your Shopping Cart</h2>
     <?php if (!empty($items)) : ?>
-        <table>
+        <table Class = "table">
             <tr>
                 <th>Title</th>
                 <th>Author</th>
@@ -51,5 +53,6 @@ $total = $cart->getTotal();
     <?php endif; ?>
     <a href="../Books/Shopping.php">Continue Shopping</a>
     <?php include '../../templates/footer.php'; ?>
+    </div>
 </body>
 </html>
