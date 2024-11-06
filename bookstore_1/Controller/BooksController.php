@@ -8,6 +8,7 @@ class BooksController {
     public function __construct() {
         // Instantiate the Database and connect to get the PDO instance
         $db = (new Database())->connect();
+        
         // Pass the database connection to the Book model
         $this->bookModel = new Book($db);
     }
@@ -15,7 +16,15 @@ class BooksController {
     // Method to list all books
     public function listBooks() {
         // Retrieve all books from the Book model
-        return $this->bookModel->getBooks();
+        $books = $this->bookModel->getBooks();
+        
+        // Debugging: Print the books array to ensure it's fetching data correctly
+        if (!$books) {
+            echo "No books were fetched from the database.";
+            return [];
+        }
+        
+        return $books;
     }
 
     // Method to view a specific book by its ID

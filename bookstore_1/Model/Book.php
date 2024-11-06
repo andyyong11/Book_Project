@@ -21,7 +21,16 @@ class Book {
         $query = 'SELECT * FROM ' . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt; // Returns a list of all books
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch all books as an associative array
+    }
+
+    // Retrieve a specific book by ID
+    public function getBookById($book_id) {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :book_id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch a single book as an associative array
     }
 
     // Add a new book to the database
@@ -37,43 +46,28 @@ class Book {
 
         return $stmt->execute(); // Returns true if the book was added successfully
     }
-}
 
-function get_Books($book_id) {
-    global $db;
-    $query = 'SELECT * FROM books
-              WHERE id = :book_id';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':book_id', $book_id);
-    $statement->execute();
-    $book = $statement->fetch();
-    $statement->closeCursor();
-    return $book;
-}
+    // Update an existing book in the database
+    public function updateBook() {
+        $query = 'UPDATE ' . $this->table . ' SET title = :title, author = :author, genre = :genre, publication_year = :publication_year WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
 
-function delete_Books($book_id) {
-    global $db;
-    $query = 'DELETE FROM books
-              WHERE id = :book_id';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':book_id', $book_id);
-    $statement->execute();
-    $statement->closeCursor();
-}
+        // Bind parameters
+        $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':author', $this->author);
+        $stmt->bindParam(':genre', $this->genre);
+        $stmt->bindParam(':publication_year', $this->publication_year);
 
-function add_product($book_id, $book_title, $author_name, $book_genre, $book_publication_year) {
-    global $db;
-    $query = 'INSERT INTO books
-                 (id, title, author, genre, publication_year)
-              VALUES
-                 (:book_id, :book_title, :author_name, :book_genre, :book_publication_year)';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':book_id', $book_id);
-    $statement->bindValue(':book_title', $book_title);
-    $statement->bindValue(':author_name', $author_name);
-    $statement->bindValue(':book_genre', $book_genre);
-    $statement->bindValue(':book_publication_year', $book_publication_year);
-    $statement->execute();
-    $statement->closeCursor();
+        return $stmt->execute(); // Returns true if the book was updated successfully
+    }
+
+    // Delete a book from the database
+    public function deleteBook($book_id) {
+        $query = 'DELETE FROM ' . $this->table . ' WHERE id = :book_id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+        return $stmt->execute(); // Returns true if the book was deleted successfully
+    }
 }
 ?>

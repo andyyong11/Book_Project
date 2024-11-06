@@ -1,3 +1,10 @@
+<?php
+require_once __DIR__ . '/../Model/Cart.php'; // Adjust path as needed
+
+$cart = new Cart();
+$itemCount = $cart->getItemCount();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,20 +20,16 @@
         <h1 class="text-center my-4">Welcome to the Bookstore</h1>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Bookstore</a>
+                <a class="navbar-brand" href="index.php">Bookstore</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../../index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Views/Books/AddBook.php">Add Book</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="Views/Cart/Cart.php">Cart</a>
+                            <a class="nav-link" href="/book_project/bookstore_1/Views/Cart/Cart.php">
+                                Cart <?php if ($itemCount > 0) echo "($itemCount)"; ?>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -34,5 +37,4 @@
         </nav>
     </header>
 </body>
-
 </html>

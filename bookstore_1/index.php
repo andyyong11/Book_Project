@@ -15,14 +15,14 @@
             <a href="add_books.php">Add a Book</a>
         </nav>
     </header> -->
-    <?php include './header.php'; ?>
+    <?php include './templates/header.php'; ?>
  
     <div class="container">
         <h2>Your Favorite Online Bookstore</h2>
         <p>Browse through our collection and add books to your cart.</p>
-        <button onclick="window.location.href='./Shopping.php'">Start Shopping</button>
+        <button onclick="window.location.href='./Views/Books/Shopping.php'">Start Shopping</button>
     </div>
  
-    <?php include './footer.php'; ?>
+    <?php include './templates/footer.php'; ?>
 </body>
 </html>

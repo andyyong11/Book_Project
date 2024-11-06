@@ -1,51 +1,55 @@
 <?php
-// Check if the cart is not empty
-if (!empty($_SESSION['cart'])): ?>
-    <h1>Your Shopping Cart</h1>
-    <table>
-        <tr>
-            <th>Book ID</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-            <th>Action</th>
-        </tr>
-        <?php
-        $totalCost = 0;
-        foreach ($_SESSION['cart'] as $item) {
-            // Check each required key exists in $item array
-            $id = htmlspecialchars($item['id'] ?? '');
-            $title = htmlspecialchars($item['title'] ?? '');
-            $author = htmlspecialchars($item['author'] ?? '');
-            $price = number_format($item['price'] ?? 0, 2);
-            $quantity = htmlspecialchars($item['quantity'] ?? 1);
-            $itemTotal = number_format(($item['price'] ?? 0) * $quantity, 2);
-            $totalCost += ($item['price'] ?? 0) * $quantity;
-            ?>
+require_once '../../Model/Cart.php'; // Make sure this includes the model where the session is already started
+
+// Initialize the cart model
+$cart = new Cart();
+
+// Handle item removal if a "remove" request is made
+if (isset($_GET['remove_id'])) {
+    $cart->removeItem($_GET['remove_id']);
+    header("Location: Cart.php"); // Refresh the page to update the cart view
+    exit;
+}
+
+// Get all items in the cart and calculate the total
+$items = $cart->getItems();
+$total = $cart->getTotal();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <h2>Your Shopping Cart</h2>
+    <?php if (!empty($items)) : ?>
+        <table>
             <tr>
-                <td><?php echo $id; ?></td>
-                <td><?php echo $title; ?></td>
-                <td><?php echo $author; ?></td>
-                <td>$<?php echo $price; ?></td>
-                <td>
-                    <input type="number" name="quantity[<?php echo $id; ?>]" value="<?php echo $quantity; ?>" min="1">
-                </td>
-                <td>$<?php echo $itemTotal; ?></td>
-                <td>
-                    <form action="actions/remove_book_to_cart.php" method="post">
-                        <input type="hidden" name="book_id" value="<?php echo $id; ?>">
-                        <button type="submit">Remove</button>
-                    </form>
-                </td>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Action</th>
             </tr>
-        <?php } ?>
-        <tr>
-            <td colspan="5"><strong>Total:</strong></td>
-            <td colspan="2">$<?php echo number_format($totalCost, 2); ?></td>
-        </tr>
-    </table>
-<?php else: ?>
-    <p>Your cart is empty.</p>
-<?php endif; ?>
+            <?php foreach ($items as $id => $item) : ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($item['title'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($item['author'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($item['price'] ?? ''); ?></td>
+                    <td><?php echo htmlspecialchars($item['quantity'] ?? ''); ?></td>
+                    <td><a href="Cart.php?remove_id=<?php echo $id; ?>">Remove</a></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <p>Total: <?php echo htmlspecialchars($total); ?></p>
+    <?php else : ?>
+        <p>Your cart is empty.</p>
+    <?php endif; ?>
+    <a href="../Books/Shopping.php">Continue Shopping</a>
+    <?php include '../../templates/footer.php'; ?>
+</body>
+</html>

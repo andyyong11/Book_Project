@@ -1,11 +1,10 @@
-<?php include './header.php'; ?>
-<?php include 'Controller/BooksController.php';
+<?php include '../../templates/header.php'; ?>
+<?php 
+require_once '../../Controller/BooksController.php';
 
-// Instantiate the controller
+// Instantiate the controller and retrieve books
 $booksController = new BooksController();
-
-// Get the list of books
-$books = $booksController->listBooks();
+$books = $booksController->listBooks(); 
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +13,7 @@ $books = $booksController->listBooks();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
     <h2>Our Book Collection</h2>
@@ -37,15 +36,14 @@ $books = $booksController->listBooks();
                     <td><?php echo htmlspecialchars($book['genre']); ?></td>
                     <td><?php echo htmlspecialchars($book['publication_year']); ?></td>
                     <td><?php echo htmlspecialchars($book['price']); ?></td>
-                    
                     <td>
-                        <form action="actions/add_book_to_cart.php" method="post"> <!-- Adjusted action path -->
+                        <form action="../../Model/Cart.php" method="post">
                             <input type="hidden" name="book_id" value="<?php echo htmlspecialchars($book['id']); ?>">
                             <input type="hidden" name="title" value="<?php echo htmlspecialchars($book['title']); ?>">
                             <input type="hidden" name="author" value="<?php echo htmlspecialchars($book['author']); ?>">
                             <input type="hidden" name="price" value="<?php echo htmlspecialchars($book['price']); ?>">
                             <label>Quantity:</label>
-                            <input type="number" name="quantity" value="1" min="1"> <!-- Quantity input -->
+                            <input type="number" name="quantity" value="1" min="1">
                             <input type="submit" value="Add to Cart">
                         </form>
                     </td>
@@ -57,4 +55,4 @@ $books = $booksController->listBooks();
     </table>
 </body>
 </html>
-<?php include './footer.php'; ?>
+<?php include '../../templates/footer.php'; ?>
