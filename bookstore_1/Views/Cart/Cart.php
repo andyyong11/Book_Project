@@ -43,7 +43,7 @@ $total = $cart->getTotal();
                     <td><?php echo htmlspecialchars($item['author'] ?? ''); ?></td>
                     <td><?php echo htmlspecialchars($item['price'] ?? ''); ?></td>
                     <td><?php echo htmlspecialchars($item['quantity'] ?? ''); ?></td>
-                    <td><a href="Cart.php?remove_id=<?php echo $id; ?>">Remove</a></td>
+                    <td><a href="Cart.php?remove_id=<?php echo $id; ?>" class="btn btn-danger">Remove</a></td>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -51,7 +51,7 @@ $total = $cart->getTotal();
     <?php else : ?>
         <p>Your cart is empty.</p>
     <?php endif; ?>
-    <a href="../Books/Shopping.php">Continue Shopping</a>
+    <a href="../Books/Shopping.php" class="btn btn-primary">Continue Shopping</a>
     <?php include '../../templates/footer.php'; ?>
     </div>
 </body>

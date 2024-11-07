@@ -45,7 +45,7 @@ $books = $booksController->listBooks();
                             <input type="hidden" name="price" value="<?php echo htmlspecialchars($book['price']); ?>">
                             <label>Quantity:</label>
                             <input type="number" name="quantity" value="1" min="1">
-                            <input type="submit" value="Add to Cart">
+                            <input type="submit" value="Add to Cart" class=" btn btn-primary">
                         </form>
                     </td>
                 </tr>
